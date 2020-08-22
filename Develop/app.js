@@ -118,7 +118,7 @@ async function buildTeam() {
             await inquirer
               .prompt(engineerQuestions)
               .then(function (engineerData) {
-                console.log(engineerData);
+               
                 const engineer = new Engineer(engineerData.engineer_name, engineerData.engineer_id, engineerData.engineer_email, engineerData.engineer_github);
                 team.push(engineer);
               });
@@ -131,7 +131,7 @@ async function buildTeam() {
             await inquirer
               .prompt(internQuestions)
               .then(function (internData) {
-                console.log(internData);
+                
                 const intern = new Intern(internData.intern_name, internData.intern_id, internData.intern_email, internData.intern_school);
                 team.push(intern);
               });
@@ -141,7 +141,7 @@ async function buildTeam() {
 
         } else if (response.team_member === "I don't want to add any more team members.") {
           const htmlData = render(team);
-          // console.log(htmlData);
+          buildHTMLOutputFile(htmlData);
           process.exit(0);
         }
       })
@@ -149,6 +149,17 @@ async function buildTeam() {
         console.log(err);
       });
   }
+}
+
+function buildHTMLOutputFile(htmlData){
+
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR, 0744);
+      console.log("output folder Created!");
+    }
+  
+    fs.writeFileSync(outputPath, htmlData, "utf8");
+    console.log("Output File generated!");
 }
 
 buildManager();
