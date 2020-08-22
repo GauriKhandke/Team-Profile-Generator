@@ -10,9 +10,148 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const managerQuestions = [{
+    type: "input",
+    name: "manager_name",
+    message: "What is your manager's name?",
+  },
+  {
+    type: "input",
+    name: "manager_id",
+    message: "What is your manager's id?",
+  },
+  {
+    type: "input",
+    name: "manager_email",
+    message: "What is your manager's email?",
+  },
+  {
+    type: "input",
+    name: "manager_officeNo",
+    message: "What is your manager's office number?",
+  },
+];
+
+const engineerQuestions = [{
+    type: "input",
+    name: "engineer_name",
+    message: "What is your engineer's name?",
+  },
+  {
+    type: "input",
+    name: "engineer_id",
+    message: "What is your engineer's id?",
+  },
+  {
+    type: "input",
+    name: "engineer_email",
+    message: "What is your engineer's email?",
+  },
+  {
+    type: "input",
+    name: "engineer_github",
+    message: "What is your engineer's github username?",
+  },
+];
+
+const internQuestions = [{
+    type: "input",
+    name: "intern_name",
+    message: "What is your intern's name?",
+  },
+  {
+    type: "input",
+    name: "intern_id",
+    message: "What is your intern's id?",
+  },
+  {
+    type: "input",
+    name: "intern_email",
+    message: "What is your intern's email?",
+  },
+  {
+    type: "input",
+    name: "intern_school",
+    message: "What is your intern's school?",
+  },
+];
+
+let team = [];
+
+function buildManager() {
+
+  try {
+    inquirer.prompt(managerQuestions)
+      .then(function (answers) {
+
+        const manager = new Manager(answers.manager_name, answers.manager_id, answers.manager_email, answers.manager_officeNo);
+        team.push(manager);
+        buildTeam();
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+async function buildTeam() {
+  
+  while (true) {
+  
+    await inquirer.prompt([{
+        type: "list",
+        name: "team_member",
+        message: "What type of team member would you like to add?",
+        choices: [
+          "Engineer",
+          "Intern",
+          "I don't want to add any more team members.",
+        ],
+      }])
+      .then(async function (response) {
+
+        if (response.team_member === "Engineer") {
+          try {
+            await inquirer
+              .prompt(engineerQuestions)
+              .then(function (engineerData) {
+                console.log(engineerData);
+                const engineer = new Engineer(engineerData.engineer_name, engineerData.engineer_id, engineerData.engineer_email, engineerData.engineer_github);
+                team.push(engineer);
+              });
+          } catch (error) {
+            console.log(error);
+          }
+
+        } else if (response.team_member === "Intern") {
+          try {
+            await inquirer
+              .prompt(internQuestions)
+              .then(function (internData) {
+                console.log(internData);
+                const intern = new Intern(internData.intern_name, internData.intern_id, internData.intern_email, internData.intern_school);
+                team.push(intern);
+              });
+          } catch (error) {
+            console.log(error);
+          }
+
+        } else if (response.team_member === "I don't want to add any more team members.") {
+          const htmlData = render(team);
+          // console.log(htmlData);
+          process.exit(0);
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
+}
+
+buildManager();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
