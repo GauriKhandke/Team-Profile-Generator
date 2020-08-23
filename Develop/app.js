@@ -12,7 +12,11 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const managerQuestions = [{
+
+
+// Questions for manager data
+const managerQuestions = [
+  {
     type: "input",
     name: "manager_name",
     message: "What is your manager's name?",
@@ -34,7 +38,10 @@ const managerQuestions = [{
   },
 ];
 
-const engineerQuestions = [{
+
+// Questions for Engineer Data
+const engineerQuestions = [
+  {
     type: "input",
     name: "engineer_name",
     message: "What is your engineer's name?",
@@ -56,7 +63,10 @@ const engineerQuestions = [{
   },
 ];
 
-const internQuestions = [{
+
+// Questions for Intern Data
+const internQuestions = [
+  {
     type: "input",
     name: "intern_name",
     message: "What is your intern's name?",
@@ -78,70 +88,102 @@ const internQuestions = [{
   },
 ];
 
+
+//Array to hold all team members
 let team = [];
 
+
+// Function to create manager and build team based on manager's input
 function buildManager() {
-
   try {
-    inquirer.prompt(managerQuestions)
-      .then(function (answers) {
+    inquirer.prompt(managerQuestions).then(function (answers) {
+      //  creates manager object and pushes manager data in team array
+      const manager = new Manager(
+        answers.manager_name,
+        answers.manager_id,
+        answers.manager_email,
+        answers.manager_officeNo
+      );
+      team.push(manager);
 
-        const manager = new Manager(answers.manager_name, answers.manager_id, answers.manager_email, answers.manager_officeNo);
-        team.push(manager);
-        buildTeam();
-      });
+      // function called to build team
+      buildTeam();
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
 
-
+// function to build team
 async function buildTeam() {
-  
   while (true) {
-  
-    await inquirer.prompt([{
-        type: "list",
-        name: "team_member",
-        message: "What type of team member would you like to add?",
-        choices: [
-          "Engineer",
-          "Intern",
-          "I don't want to add any more team members.",
-        ],
-      }])
+    await inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "team_member",
+          message: "What type of team member would you like to add?",
+          choices: [
+            "Engineer",
+            "Intern",
+            "I don't want to add any more team members.",
+          ],
+        },
+      ])
       .then(async function (response) {
-
+        // If manager selects to include 'Engineer'
         if (response.team_member === "Engineer") {
           try {
             await inquirer
               .prompt(engineerQuestions)
               .then(function (engineerData) {
-               
-                const engineer = new Engineer(engineerData.engineer_name, engineerData.engineer_id, engineerData.engineer_email, engineerData.engineer_github);
+                // creates engineer object from manager's response and push into team array
+                const engineer = new Engineer(
+                  engineerData.engineer_name,
+                  engineerData.engineer_id,
+                  engineerData.engineer_email,
+                  engineerData.engineer_github
+                );
+
                 team.push(engineer);
               });
           } catch (error) {
             console.log(error);
           }
 
+          // If manager selects to include 'Intern'
         } else if (response.team_member === "Intern") {
+          
           try {
-            await inquirer
-              .prompt(internQuestions)
-              .then(function (internData) {
-                
-                const intern = new Intern(internData.intern_name, internData.intern_id, internData.intern_email, internData.intern_school);
-                team.push(intern);
-              });
+            
+            await inquirer.prompt(internQuestions).then(function (internData) {
+              
+              //creates intern object from manager's response and push into team array
+              const intern = new Intern(
+                internData.intern_name,
+                internData.intern_id,
+                internData.intern_email,
+                internData.intern_school
+              );
+
+              team.push(intern);
+
+            });
           } catch (error) {
             console.log(error);
           }
 
-        } else if (response.team_member === "I don't want to add any more team members.") {
+          // If manager done with team
+        } else if ( response.team_member === "I don't want to add any more team members." ) {
+          
+          // called render frunction by passing team array and htmldata is obtained from that function
           const htmlData = render(team);
-          buildHTMLOutputFile(htmlData);
+
+          // Function called to write to file and generate html output file
+          writeToFile(htmlData);
+
+          // To exit from process and while loop
           process.exit(0);
         }
       })
@@ -151,18 +193,33 @@ async function buildTeam() {
   }
 }
 
-function buildHTMLOutputFile(htmlData){
 
-    if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR, 0744);
-      console.log("output folder Created!");
-    }
-  
-    fs.writeFileSync(outputPath, htmlData, "utf8");
-    console.log("Output File generated!");
+// Function to write to output file
+function writeToFile(htmlData) {
+
+  // Checks if 'output' folder exists in current directory
+  if (!fs.existsSync(OUTPUT_DIR)) {
+
+    // Create 'output' folder if does not exists
+    fs.mkdirSync(OUTPUT_DIR, 0744);
+    console.log("output folder Created!");
+
+  }
+
+  // write htmldata to 'team.html' file
+  fs.writeFileSync(outputPath, htmlData, "utf8");
+
+  console.log("Output File generated!");
+ 
 }
 
-buildManager();
+function init(){
+  
+  console.log("Build Team :");
+  buildManager();
+}
+
+init();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
