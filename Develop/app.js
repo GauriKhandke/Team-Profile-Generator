@@ -30,6 +30,12 @@ const managerQuestions = [
     type: "input",
     name: "manager_email",
     message: "What is your manager's email?",
+    validate: function (value) {
+      valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+
+      if (valid) return true;
+      else return "  Please enter valid email ID ";
+    },
   },
   {
     type: "input",
@@ -55,6 +61,12 @@ const engineerQuestions = [
     type: "input",
     name: "engineer_email",
     message: "What is your engineer's email?",
+    validate: function (value) {
+      valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+
+      if (valid) return true;
+      else return "  Please enter valid email ID ";
+    },
   },
   {
     type: "input",
@@ -80,6 +92,12 @@ const internQuestions = [
     type: "input",
     name: "intern_email",
     message: "What is your intern's email?",
+    validate: function (value) {
+      valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
+
+      if (valid) return true;
+      else return "  Please enter valid email ID ";
+    },
   },
   {
     type: "input",
@@ -156,9 +174,9 @@ async function buildTeam() {
         } else if (response.team_member === "Intern") {
           
           try {
-            
+          
             await inquirer.prompt(internQuestions).then(function (internData) {
-              
+          
               //creates intern object from manager's response and push into team array
               const intern = new Intern(
                 internData.intern_name,
@@ -168,15 +186,16 @@ async function buildTeam() {
               );
 
               team.push(intern);
-
+            
             });
           } catch (error) {
             console.log(error);
           }
 
           // If manager done with team
-        } else if ( response.team_member === "I don't want to add any more team members." ) {
-          
+        } else if (
+          response.team_member === "I don't want to add any more team members."
+        ) {
           // called render frunction by passing team array and htmldata is obtained from that function
           const htmlData = render(team);
 
@@ -210,12 +229,10 @@ function writeToFile(htmlData) {
   fs.writeFileSync(outputPath, htmlData, "utf8");
 
   console.log("Output File generated!");
- 
 }
 
-function init(){
-  
-  console.log("Build Team :");
+function init() {
+  console.log("Welcome to Team Profile Generator! Build your team :");
   buildManager();
 }
 
