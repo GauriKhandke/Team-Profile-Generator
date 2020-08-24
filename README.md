@@ -22,12 +22,12 @@ One of the most important aspects of programming is writing code that is readabl
 * [Questions](#questions)
 
 # Demo
-![Team Profile Generator](images/ReadmeGenerator.gif)
+![Team Profile Generator](images/TeamProfileGenerator.gif)
 # Screenshots
 
-|Terminal|Generated README.md file
+|Terminal|Generated Team Page
 |--|--
-|![Terminal](images/readme-terminal.png)|![HTML Team Page](images/preview.png)
+|![Terminal](images/Terminal.png)|![HTML Team Page](images/TeamProfileGenerator.png)
 
 ## User Story
 
