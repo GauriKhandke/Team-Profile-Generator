@@ -1,4 +1,3 @@
-// TODO: Write code to define and export the Manager class. HINT: This class should inherit from Employee.
 
 const Employee = require("./Employee");
 
@@ -17,6 +16,5 @@ class Manager extends Employee{
         return this.officeNumber;
     }
 }
-const m = new Manager("John", 1, "john@gmail.com", 10);
 
 module.exports = Manager;
