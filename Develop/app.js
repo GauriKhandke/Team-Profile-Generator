@@ -25,6 +25,10 @@ const managerQuestions = [
     type: "input",
     name: "manager_id",
     message: "What is your manager's id?",
+    validate : function(value){
+      if(isNaN(value)) return " Please enter valid ID"
+      else return true;
+    },
   },
   {
     type: "input",
@@ -41,6 +45,10 @@ const managerQuestions = [
     type: "input",
     name: "manager_officeNo",
     message: "What is your manager's office number?",
+    validate : function(value){
+      if(isNaN(value)) return " Please enter valid office number"
+      else return true;
+    },
   },
 ];
 
@@ -56,6 +64,10 @@ const engineerQuestions = [
     type: "input",
     name: "engineer_id",
     message: "What is your engineer's id?",
+    validate : function(value){
+      if(isNaN(value)) return " Please enter valid ID"
+      else return true;
+    },
   },
   {
     type: "input",
@@ -87,6 +99,10 @@ const internQuestions = [
     type: "input",
     name: "intern_id",
     message: "What is your intern's id?",
+    validate : function(value){
+      if(isNaN(value)) return " Please enter valid ID"
+      else return true;
+    },
   },
   {
     type: "input",
