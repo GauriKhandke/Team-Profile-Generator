@@ -1,12 +1,9 @@
 # Team-Profile-Generator
-
 ![MIT License](https://img.shields.io/badge/license-MIT-green)
 
-# Goal
+# Description
 
-* Goal is to build a Node CLI that takes in information about employees using the [Inquirer package](https://www.npmjs.com/package/inquirer) and generates an HTML webpage that displays summaries for each person.
-* Since testing is a key piece in making code maintainable, ensure that all unit tests pass.
-
+Team profile generator is a node command line application that takes in information about employees using the [Inquirer package](https://www.npmjs.com/package/inquirer) and generates an HTML webpage that displays summaries for each person.
 
 # Motivation
 
